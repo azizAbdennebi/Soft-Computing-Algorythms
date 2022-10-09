@@ -1,17 +1,26 @@
+
+
 import time
+
+from recherche_taboue import recherche_taboue
+from recuit_simule import recuit_simule
 
 class Team1:
     def __init__(self):
         self.name = "Team 1"
-        self.solvingMethods = ["method1"] # List of methods that are exactly the name of the methods used
+        self.solvingMethods = ["Recherche_Taboue","Recuit_Simule"] # List of methods that are exactly the name of the methods used
     
-    def method1(self, numberOfElements, listOfElements , backPackSize):
+    def Recherche_Taboue(self, numberOfElements, listOfElements , backPackSize):
       # Your code here
       # Return the solution as a list of the optimal value and a string of "0"s and "1"s representing the items that are in the backpack
       # Example: [10, "010101"]
       # Check the example below
+      return(recherche_taboue(numberOfElements, listOfElements , backPackSize))
 
-      pass
+
+    def Recuit_Simule(self, numberOfElements, listOfElements , backPackSize):
+      return(recuit_simule(numberOfElements, listOfElements , backPackSize))
+      
 
     # Don't forget to add any new methods name to the solvingMethods list above
     # Edit only team 1, and the program will automatically compare the results of both teams and all the methods used by each team
