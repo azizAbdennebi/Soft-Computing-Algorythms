@@ -1,27 +1,19 @@
-
-
 import time
+import sys
 
-from recherche_taboue import recherche_taboue
-from recuit_simule import recuit_simule
+# setting path
+sys.path.append('Approximation_methods\\Single_solution_algorithms')
+
+from simulated_annealing import simulated_annealing_method
 
 class Team1:
     def __init__(self):
         self.name = "Team 1"
-        self.solvingMethods = ["Recherche_Taboue","Recuit_Simule"] # List of methods that are exactly the name of the methods used
+        self.solvingMethods = ["simulated_annealing"] # List of methods that are exactly the name of the methods used
+
+    def simulated_annealing(self, numberOfElements, listOfElements , backPackSize):
+        return simulated_annealing_method(numberOfElements, listOfElements , backPackSize)
     
-    def Recherche_Taboue(self, numberOfElements, listOfElements , backPackSize):
-      # Your code here
-      # Return the solution as a list of the optimal value and a string of "0"s and "1"s representing the items that are in the backpack
-      # Example: [10, "010101"]
-      # Check the example below
-      return(recherche_taboue(numberOfElements, listOfElements , backPackSize))
-
-
-    def Recuit_Simule(self, numberOfElements, listOfElements , backPackSize):
-      return(recuit_simule(numberOfElements, listOfElements , backPackSize))
-      
-
     # Don't forget to add any new methods name to the solvingMethods list above
     # Edit only team 1, and the program will automatically compare the results of both teams and all the methods used by each team
 
@@ -56,7 +48,7 @@ class Team2:
 
 if __name__ == "__main__":
     # this is the input data, you can change it to test your code with different inputs
-    f= open("f1_l-d_kp_10_269","r")
+    f= open("Tests\\f1_l-d_kp_10_269","r")
     numberOfElements, backPackSize = map(int, f.readline().split())
     listOfElements = []
     for i in range(numberOfElements):
@@ -76,4 +68,3 @@ if __name__ == "__main__":
         print(team2.name, method)
         print(getattr(team2, method)(numberOfElements, listOfElements, backPackSize))
         print("Time taken:",time.time() - start)
-
