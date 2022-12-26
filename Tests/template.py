@@ -5,14 +5,19 @@ import sys
 sys.path.append('Approximation_methods\\Single_solution_algorithms')
 
 from simulated_annealing import simulated_annealing_method
+from glouton_search import glouton_search_method
+
 
 class Team1:
     def __init__(self):
         self.name = "Team 1"
-        self.solvingMethods = ["simulated_annealing"] # List of methods that are exactly the name of the methods used
+        self.solvingMethods = ["simulated_annealing","glouton_search"] # List of methods that are exactly the name of the methods used
 
     def simulated_annealing(self, numberOfElements, listOfElements , backPackSize):
         return simulated_annealing_method(numberOfElements, listOfElements , backPackSize)
+
+    def glouton_search(self, numberOfElements, listOfElements , backPackSize):
+        return glouton_search_method(numberOfElements, listOfElements , backPackSize)
     
     # Don't forget to add any new methods name to the solvingMethods list above
     # Edit only team 1, and the program will automatically compare the results of both teams and all the methods used by each team
@@ -61,10 +66,10 @@ if __name__ == "__main__":
         start = time.time()
         print(team1.name, method)
         print(getattr(team1, method)(numberOfElements, listOfElements, backPackSize))
-        print("Time taken:",time.time() - start)
+        print("Time taken:",time.time() - start, "\n")
     print()
     for method in team2.solvingMethods:
         start = time.time()
         print(team2.name, method)
         print(getattr(team2, method)(numberOfElements, listOfElements, backPackSize))
-        print("Time taken:",time.time() - start)
+        print("Time taken:",time.time() - start, "\n")
