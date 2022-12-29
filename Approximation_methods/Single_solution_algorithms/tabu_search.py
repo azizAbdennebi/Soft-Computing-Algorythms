@@ -2,12 +2,13 @@ import numpy as np
 import re
 from operator import itemgetter
 
-def greedy_knapsack(numberOfElements,listOfElements, capacity):
+
+def greedy_knapsack(numberOfElements, listOfElements, capacity):
     solution = []
 
     capacite_restante = capacity
     current_weight = 0
-    listOfElements = sorted(listOfElements,key=itemgetter(1), reverse=True)
+    listOfElements = sorted(listOfElements, key=itemgetter(1), reverse=True)
     max_value = 0
     for i in range(numberOfElements):
         if listOfElements[i][1] <= capacite_restante:
@@ -36,8 +37,9 @@ def f(begin_solution, item, capacity):
     return max_value
 
 
-def tabu_search_method(numberOfElements, listOfElements , backPackSize):
-    begin_solution, current_weight = greedy_knapsack(numberOfElements,listOfElements, backPackSize)
+def tabu_search_method(numberOfElements, listOfElements, backPackSize):
+    begin_solution, current_weight = greedy_knapsack(
+        numberOfElements, listOfElements, backPackSize)
     T = []
     It = 0
     BestIt = 0
@@ -58,7 +60,6 @@ def tabu_search_method(numberOfElements, listOfElements , backPackSize):
                 temp[i] = 0
             else:
                 temp[i] = 1
-
 
             solution_partial = temp[:]
             if f(solution_partial, listOfElements, capacity_rest) > valor and not (i in T):
@@ -87,7 +88,7 @@ def tabu_search_method(numberOfElements, listOfElements , backPackSize):
         if mov == -1 and movTabu == -1:
             break
         if mov != -1:
-            if not(mov in T):
+            if not (mov in T):
                 if len(T) == 3:
                     del T[0]
                 T.append(mov)
@@ -97,5 +98,5 @@ def tabu_search_method(numberOfElements, listOfElements , backPackSize):
 
     result = list()
     result.append(f(best_solution, listOfElements, backPackSize))
-    result.append("".join(str(i) for i in reversed(best_solution)))
+    result.append("".join(str(i) for i in best_solution))
     return result
