@@ -1,35 +1,27 @@
 import random
 import math
+from operator import itemgetter
 
 # function that select the initial solution of simulated_annealing method randomly
 def select_initial_solution_randomly(numberOfElements, listOfElements, backPackSize):
-    remaining_items = listOfElements.copy()
-    selected_items = []
-    remaining_capacity = backPackSize
+    solution = []
 
-    items_selection_list = numberOfElements * ['0']
+    remaining_capacity = backPackSize
+    current_weight = 0
+    listOfElements = sorted(listOfElements,key=itemgetter(1), reverse=True)
     value = 0
-  
-    while remaining_capacity > 0 and len(remaining_items) > 0:
-        index = random.randint(0, len(remaining_items) - 1)
-        if remaining_capacity - remaining_items[index][1] < 0:
-            del remaining_items[index]
-            continue
-        else:
-            remaining_capacity = remaining_capacity - remaining_items[index][1]
-            selected_items.append(remaining_items[index])
-            value = value + remaining_items[index][0]
-            initial_index = listOfElements.index(remaining_items[index])
-            items_selection_list[initial_index] = '1'
-            #Test
-            #print("Selected object: ", remaining_items[index],' --> initial index ', initial_index)
-            del remaining_items[index]
-    #Test  
-    #print("Remaining capacity: ", remaining_capacity)
-    #print("Selected objects: ", selected_items)
-  
-    items_selection_string = ''.join(e for e in items_selection_list)
-  
+    for i in range(numberOfElements):
+        if listOfElements[i][1] <= remaining_capacity:
+            remaining_capacity -= listOfElements[i][1]
+            value += listOfElements[i][0]
+            solution.append(i)
+
+    begin_solution = ['0' for i in range(numberOfElements)]
+    for i in solution:
+        begin_solution[i] = '1'
+    
+    items_selection_string = ''.join(e for e in begin_solution)
+
     return [value, items_selection_string]
 
 #Test 
@@ -70,28 +62,39 @@ def simulated_annealing_method(numberOfElements, listOfElements , backPackSize):
     T = 100
     Tmin = 85
     K = 0.95
-    nb_it = 3
+    nb_it = 5
     i = 0
+    M = 10
 
     solution = select_initial_solution_randomly(numberOfElements, listOfElements, backPackSize)
     #print("Initial solution: ", solution)
 
+    best_solution = solution
+
     while T>Tmin and i<nb_it:
         i = i + 1
 
-        #Perturbation
-        new_solution = create_new_solution(solution, listOfElements, backPackSize )
-        #print("iteration ", i, " : new solution = ", new_solution)
+        m = 0        
+        while m<M:
+            #Perturbation
+            new_solution = create_new_solution(solution, listOfElements, backPackSize )
+            #print("iteration ", i, " : new solution = ", new_solution)
 
-        #Comparison
-        diff = solution[0] - new_solution[0]
+            #Comparison
+            diff = solution[0] - new_solution[0]
+            
+            if (diff <= 0):
+                solution = new_solution 
+                if (diff < 0):   
+                    best_solution = solution         
+            else : 
+                if random.uniform(0,1) < math.exp(-diff/T): 
+                    solution = new_solution
+                    if (diff < 0):   
+                        best_solution = solution
         
-        if (diff < 0):
-            solution = new_solution            
-        else : 
-            if random.uniform(0,1) < math.exp(-diff/T): 
-                solution = new_solution
+            m = m + 1
         
         T = T * K
     #print("Final solution: ", solution)
-    return solution
+    return best_solution

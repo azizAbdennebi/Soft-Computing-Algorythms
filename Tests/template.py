@@ -57,11 +57,11 @@ class Team2:
 
 if __name__ == "__main__":
     # this is the input data, you can change it to test your code with different inputs
-    f= open("Tests\\f1_l-d_kp_10_269","r")
+    f= open("Tests\\f6_l-d_kp_10_60","r")
     numberOfElements, backPackSize = map(int, f.readline().split())
     listOfElements = []
     for i in range(numberOfElements):
-        listOfElements.append(list(map(int, f.readline().split())))
+        listOfElements.append(list(map(float, f.readline().split())))
     f.close()
 
     team1 = Team1()
