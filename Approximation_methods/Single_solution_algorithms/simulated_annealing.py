@@ -7,7 +7,6 @@ def select_initial_solution_randomly(numberOfElements, listOfElements, backPackS
     solution = []
 
     remaining_capacity = backPackSize
-    current_weight = 0
     listOfElements = sorted(listOfElements,key=itemgetter(1), reverse=True)
     value = 0
     for i in range(numberOfElements):
@@ -59,15 +58,15 @@ def create_new_solution(initial_solution, listOfElements, backPackSize ):
     
 def simulated_annealing_method(numberOfElements, listOfElements , backPackSize):
     # Initialisation
-    T = 100
-    Tmin = 85
-    K = 0.95
+    T = 60
+    Tmin = 10
+    K = 0.8
     nb_it = 5
     i = 0
     M = 10
 
     solution = select_initial_solution_randomly(numberOfElements, listOfElements, backPackSize)
-    #print("Initial solution: ", solution)
+    #print("Initial solution: ", solution, ", S_Best = ", solution, "\n")
 
     best_solution = solution
 
@@ -76,24 +75,23 @@ def simulated_annealing_method(numberOfElements, listOfElements , backPackSize):
 
         m = 0        
         while m<M:
+            m = m + 1
+
             #Perturbation
             new_solution = create_new_solution(solution, listOfElements, backPackSize )
-            #print("iteration ", i, " : new solution = ", new_solution)
 
             #Comparison
             diff = solution[0] - new_solution[0]
             
             if (diff <= 0):
                 solution = new_solution 
-                if (diff < 0):   
+                if (diff < 0 and solution[0] != best_solution[0]):  
                     best_solution = solution         
             else : 
-                if random.uniform(0,1) < math.exp(-diff/T): 
+                if random.uniform(0,1) <= math.exp(-diff/T): 
                     solution = new_solution
-                    if (diff < 0):   
+                    if (diff < 0 and solution[0] != best_solution[0]):  
                         best_solution = solution
-        
-            m = m + 1
         
         T = T * K
     #print("Final solution: ", solution)
