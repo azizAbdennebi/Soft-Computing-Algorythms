@@ -6,22 +6,42 @@ from operator import itemgetter
 def select_initial_solution_randomly(numberOfElements, listOfElements, backPackSize):
     solution = []
 
-    remaining_capacity = backPackSize
-    listOfElements = sorted(listOfElements,key=itemgetter(1), reverse=True)
-    value = 0
-    for i in range(numberOfElements):
-        if listOfElements[i][1] <= remaining_capacity:
-            remaining_capacity -= listOfElements[i][1]
-            value += listOfElements[i][0]
-            solution.append(i)
+    listObjects = []
+    for e in listOfElements:
+        if e not in listObjects:
+            listObjects.append(e)
 
+    indexObjects = [] 
+    
+    for i in range(len(listObjects)):
+        index = []
+        for j in range(numberOfElements):
+            if( listOfElements[j] == listObjects[i]):
+                index.append(j)
+        indexObjects.append(index)
+
+    nbSelectionObjects = len(listObjects) * [0]
+
+    capacite_restante = backPackSize
+    current_weight = 0
+    temp_list = sorted(listOfElements,key=itemgetter(1), reverse=True)
+    max_value = 0
     begin_solution = ['0' for i in range(numberOfElements)]
-    for i in solution:
-        begin_solution[i] = '1'
+
+    for i in range(numberOfElements):
+        if temp_list[i][1] <= capacite_restante:
+            capacite_restante -= temp_list[i][1]
+            current_weight += temp_list[i][1]
+            solution.append(i)
+            max_value += temp_list[i][0]
+
+            index = listObjects.index(temp_list[i])
+            begin_solution[indexObjects[index][nbSelectionObjects[index]]] = '1'
+            nbSelectionObjects[index] += 1
     
     items_selection_string = ''.join(e for e in begin_solution)
 
-    return [value, items_selection_string]
+    return [max_value, items_selection_string]
 
 #Test 
 #result = select_initial_solution_randomly(4, [[9,6],[11,5],[13,9],[15,7]], 20)
