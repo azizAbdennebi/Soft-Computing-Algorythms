@@ -105,14 +105,13 @@ def simulated_annealing_method(numberOfElements, listOfElements , backPackSize):
             
             if (diff <= 0):
                 solution = new_solution 
+                T = T * K
                 if (diff < 0 and solution[0] != best_solution[0]):  
                     best_solution = solution         
             else : 
                 if random.uniform(0,1) <= math.exp(-diff/T): 
                     solution = new_solution
-                    if (diff < 0 and solution[0] != best_solution[0]):  
-                        best_solution = solution
+                    T = T * K
         
-        T = T * K
     #print("Final solution: ", solution)
     return best_solution
